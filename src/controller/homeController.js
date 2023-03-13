@@ -1,13 +1,4 @@
-import mysql from 'mysql2'
-
-const connection = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',
-  password: 'root',
-  database: 'express_db',
-  port: '3307',
-})
-
+import { createNewUser } from '../service/userService'
 const handleHomePage = (req, res) => {
   const context = {
     name: 'Quang Khai',
@@ -16,11 +7,10 @@ const handleHomePage = (req, res) => {
 }
 
 const handleCreateUser = (req, res) => {
-  console.log('🚀 ~ file: homeController.js:9 ~ handleCreateUser ~ req:', req.body)
   let username = req.body.username
   let email = req.body.email
   let password = req.body.password
-
+  createNewUser(email, username, password)
   return res.send('Create User')
 }
 
