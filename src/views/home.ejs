@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/daisyui@2.51.3/dist/full.css"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Home Page</title>
+  </head>
+  <body>
+    <main class="max-w-[1200px] mx-auto my-10">
+      <h1 class="text-center text-3xl font-semibold">Hello Express <%=name%></h1>
+      <form
+        class="mt-10 flex flex-col gap-y-5 max-w-lg py-5 px-8 mx-auto rounded-xl shadow-lg"
+        action="/users/create-user"
+        method="post"
+      >
+        <div class="form-control w-full">
+          <label class="label" for="usernameId">
+            <span class="label-text">Username</span>
+          </label>
+          <input
+            type="text"
+            id="usernameId"
+            placeholder="Enter your username"
+            name="username"
+            class="input input-primary w-full placeholder:italic"
+            required
+          />
+        </div>
+        <div class="form-control w-full">
+          <label class="label" for="emailId">
+            <span class="label-text">Email</span>
+          </label>
+          <input
+            type="text"
+            id="emailId"
+            placeholder="Enter your email"
+            name="email"
+            class="input input-primary w-full placeholder:italic"
+            required
+          />
+        </div>
+        <div class="form-control w-full">
+          <label class="label" for="passwordId">
+            <span class="label-text">Password</span>
+          </label>
+          <input
+            type="password"
+            id="passwordId"
+            placeholder="Enter your password"
+            name="password"
+            class="input input-primary w-full placeholder:italic"
+            required
+          />
+        </div>
+
+        <button class="btn btn-primary mb-10">Submit</button>
+      </form>
+    </main>
+  </body>
+</html>
