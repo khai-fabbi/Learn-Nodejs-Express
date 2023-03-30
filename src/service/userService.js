@@ -1,9 +1,7 @@
 import bcrypt from 'bcryptjs'
 import mysql from 'mysql2/promise'
-
-// get the promise implementation, we will use bluebird
 import bluebird from 'bluebird'
-
+import db, { User } from '../models'
 const salt = bcrypt.genSaltSync(10)
 
 const getHashPassword = (password) => {
@@ -12,94 +10,38 @@ const getHashPassword = (password) => {
 
 const createNewUser = async (email, username, password) => {
   let hashPass = getHashPassword(password)
-
-  const connection = await mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: 'root',
-    database: 'express_db',
-    port: '3307',
-    Promise: bluebird,
-  })
-  try {
-    const [rows, fields] = await connection.execute(
-      `INSERT INTO users(email, username, password)
-    VALUES (?, ?, ?)`,
-      [email, username, hashPass],
-    )
-    return rows
-  } catch (error) {
-    console.log(error)
-  }
+  await User.create({ email, username, password: hashPass })
 }
 
 const getUserList = async () => {
-  const connection = await mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: 'root',
-    database: 'express_db',
-    port: '3307',
-    Promise: bluebird,
-  })
-  try {
-    const [rows, fields] = await connection.execute('Select * from users')
-    return rows
-  } catch (error) {
-    console.log(error)
-  }
+  const userList = await User.findAll()
+  return userList
 }
 const getUserDetail = async (userId) => {
-  const connection = await mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: 'root',
-    database: 'express_db',
-    port: '3307',
-    Promise: bluebird,
-  })
-  try {
-    const [rows, fields] = await connection.execute('Select * from users where id=?', [userId])
-    return rows
-  } catch (error) {
-    console.log(error)
+  const user = await User.findByPk(userId)
+  if (!user) {
+    console.log(user)
+    return
   }
+  return user
 }
 
-const deleteUser = async (id) => {
-  const connection = await mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: 'root',
-    database: 'express_db',
-    port: '3307',
-    Promise: bluebird,
+const deleteUser = async (userId) => {
+  await User.destroy({
+    where: {
+      id: userId,
+    },
   })
-  try {
-    const [rows, fields] = await connection.execute('Delete from users where id=?', [id])
-    return rows
-  } catch (error) {
-    console.log(error)
-  }
 }
 const updateUser = async (id, username, email) => {
-  const connection = await mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: 'root',
-    database: 'express_db',
-    port: '3307',
-    Promise: bluebird,
-  })
-  try {
-    const [rows, fields] = await connection.execute(
-      'Update users SET username=?, email=? WHERE id=?',
-      [username, email, id],
-    )
-    return rows
-  } catch (error) {
-    console.log(error)
-  }
+  await User.update(
+    { username, email },
+    {
+      where: {
+        id: id,
+      },
+    },
+  )
 }
 module.exports = {
   createNewUser,

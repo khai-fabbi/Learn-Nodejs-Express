@@ -29,12 +29,11 @@ const handleDeleteUser = async (req, res) => {
 const handleDetailUser = async (req, res) => {
   const userId = req.params.id
   let userDetail = await getUserDetail(userId)
-  console.log('🚀 ~ file: homeController.js:26 ~ handleDetailUser ~ userDetail:', userDetail)
   let userList = await getUserList()
   const context = {
     name: 'Quang Khai',
     userList,
-    userDetail: userDetail[0],
+    userDetail: userDetail,
   }
   return res.render('update-user.ejs', context)
 }
