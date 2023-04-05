@@ -1,7 +1,6 @@
 import bcrypt from 'bcryptjs'
-import mysql from 'mysql2/promise'
-import bluebird from 'bluebird'
-import db, { User } from '../models'
+
+import db, { User, Group } from '../models'
 const salt = bcrypt.genSaltSync(10)
 
 const getHashPassword = (password) => {
@@ -14,7 +13,17 @@ const createNewUser = async (email, username, password) => {
 }
 
 const getUserList = async () => {
-  const userList = await User.findAll()
+  const userList = await User.findAll({
+    include: {
+      model: Group,
+      attributes: ['id', 'name'],
+      // as: 'group',
+    },
+    attributes: ['id', 'username', 'email'],
+    raw: true,
+    nest: true,
+  })
+  console.log('🚀 ~ file: userService.js:18 ~ getUserList ~ userList:', userList)
   return userList
 }
 const getUserDetail = async (userId) => {
